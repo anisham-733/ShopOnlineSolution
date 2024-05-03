@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ShopOnline.Models\ShopOnline.Models.csproj" />
   </ItemGroup>
 
 </Project>

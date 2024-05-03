@@ -6,8 +6,11 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnline.Web", "ShopOnline.Web\ShopOnline.Web.csproj", "{7E933ED4-A88D-4059-A80B-EB82842FD3B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnline.API", "ShopOnline.API\ShopOnline.API.csproj", "{A4260529-7DDD-49C0-B2C9-D54A1B2389CD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E131F571-FA98-4A00-A3C6-1DDB2C48B526} = {E131F571-FA98-4A00-A3C6-1DDB2C48B526}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopOnline.Models", "ShopOnline.Models\ShopOnline.Models.csproj", "{E131F571-FA98-4A00-A3C6-1DDB2C48B526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopOnline.Models", "ShopOnline.Models\ShopOnline.Models.csproj", "{E131F571-FA98-4A00-A3C6-1DDB2C48B526}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
