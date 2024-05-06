@@ -38,8 +38,31 @@ namespace ShopOnline.Web.Services
             }
         }
 
-        public Task<IEnumerable<CartItemDto>> GetItems(int userId)
+        public async Task<IEnumerable<CartItemDto>> GetItems(int userId)
         {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/{userId}/GetItems");
+                if (response.IsSuccessStatusCode)
+                {
+                    if(response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return Enumerable.Empty<CartItemDto>();
+                    }
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<CartItemDto>>();
+                }
+                else
+                {
+                    var message  = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Http status code: {response.StatusCode} Message: {message}");
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             
         }
     }

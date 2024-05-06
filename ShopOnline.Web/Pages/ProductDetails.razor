@@ -24,7 +24,18 @@ else
                         @Product.Price.ToString("C")&nbsp;(@Product.Qty items in stock)
                     </b>
                 </p>
+
                 <div>
+                @*by default when a user adds a product to cart, the qty is 1*@
+                    <button class="btn btn-success"
+                    @onclick = "() => (AddToCart_Click(new CartItemToAddDto{
+                        CartId = HardCoded.CartId,
+                        ProductId = Product.Id,                        
+                        Qty = 1
+
+                    }))"
+
+                    ><b>Add to cart</b></button>
                     @*<button class="btn btn-success"
                     @onclick="() => (AddToCart_Click(new CartItemToAddDto{
                         CartId = HardCoded.CartId,
