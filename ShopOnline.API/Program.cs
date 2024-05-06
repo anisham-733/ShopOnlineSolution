@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using ShopOnline.API.Data;
+using ShopOnline.API.Repositories;
 using ShopOnline.API.Repositories.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<ShopOnlineDbContext>(options =>
 
 //same instance of object is created withing a particular http request
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
 
 var app = builder.Build();
 

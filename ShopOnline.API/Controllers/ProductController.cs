@@ -13,7 +13,7 @@ namespace ShopOnline.API.Controllers
         public ProductController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            
+
         }
         //actionresult-returns requested data as well as response status code
         [HttpGet]
@@ -38,8 +38,35 @@ namespace ShopOnline.API.Controllers
             catch (Exception)
             {
 
-                return StatusCode(StatusCodes.Status500InternalServerError,"Error retrieving data from database");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
             }
         }
+
+        [HttpGet("{id:int}")]
+        //return one object of type ProductDto
+        public async Task<ActionResult<ProductDto>> GetItem(int id)
+        {
+            //write try and press tab key twice
+            try
+            {
+                //could be optimized using Include in Linq query
+                var product = await _productRepository.GetItem(id);
+
+                if (product == null) { return BadRequest(); }
+                else
+                {
+                    var productCategory = await _productRepository.GetCategory(product.CategoryId);
+                    var productDto = product.ConvertToDto(productCategory);
+                    return Ok(productDto);
+                }
+
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
+            }
+        }
+
     }
 }
