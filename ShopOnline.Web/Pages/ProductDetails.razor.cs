@@ -15,6 +15,9 @@ namespace ShopOnline.Web.Pages
         [Inject]
         public IShoppingCartService ShoppingCartService { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
         public ProductDto Product { get; set; }
 
         public string ErrorMessage { get; set; }
@@ -39,7 +42,7 @@ namespace ShopOnline.Web.Pages
             {
                 //add a product chosen by user to user's shopping cart
                 var cartItemDto = await ShoppingCartService.AddItem(cartItemToAddDto);
-
+                NavigationManager.NavigateTo("/ShoppingCart");
             }
             catch (Exception)
             {

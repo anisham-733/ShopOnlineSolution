@@ -28,7 +28,7 @@ namespace ShopOnline.API.Repositories
                                     select new CartItem
                                     {
                                         CartId = cartItemToAddDto.CartId,
-                                        ProductId = cartItemToAddDto.ProductId,
+                                        ProductId = product.Id,
                                         Qty = cartItemToAddDto.Qty,
                                     }
                                   ).SingleOrDefaultAsync();
@@ -43,9 +43,16 @@ namespace ShopOnline.API.Repositories
             return null;
         }
 
-        public Task<CartItem> DeleteItem(int id)
+        public async Task<CartItem> DeleteItem(int id)
         {
-            throw new NotImplementedException();
+            //id-entity that we wish to delete
+            CartItem? item = await _context.CartItems.FindAsync(id);
+            if(item!= null)
+            {
+                _context.CartItems.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+            return item;
         }
 
         //item stored in shopping cart
@@ -73,7 +80,7 @@ namespace ShopOnline.API.Repositories
                           where cart.UserId == userId
                           select new CartItem
                           {
-                              Id = cartItem.CartId,
+                              Id = cartItem.Id,
                               ProductId= cartItem.ProductId,
                               Qty = cartItem.Qty,
                               CartId = cartItem.CartId,
