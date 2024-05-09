@@ -1,0 +1,43 @@
+﻿@implements IDisposable
+@using ShopOnline.Web.Services.Contracts
+@inject IShoppingCartService shoppingCartService
+
+@*and also navigate to user shopping cart when this button is clicked*@
+
+@*in order to avoid memory leaks, we can write code to unsubscribe from the onshoppingcartchanged event*@
+
+@*and use dispose method to unsubscribe from onshoppingcartchanged event*@
+
+
+<a href="ShoppingCart" class="btn btn-info">
+    <i class="oi oi-cart"></i>&nbsp;Cart
+    <span class="badge bg-dark">@shoppingCartItemCount</span>
+
+</a>
+
+
+@code{
+    private int shoppingCartItemCount = 0;
+
+    protected override void OnInitialized()
+    {
+        //now we want our razor component to subscribe to the event that we created in service class
+        //every time the event is raised, shoppingCartChanged method will run
+        shoppingCartService.OnShoppingCartChanged += ShoppingCartChanged;
+    }
+
+    protected void ShoppingCartChanged(int totalQty)
+    {
+        shoppingCartItemCount = totalQty;
+        StateHasChanged(); //blazors built in method
+                           //an explicit way to tell blazor to rerender that razor compo
+    }
+
+    void IDisposable.Dispose()
+    {
+        // += is used to subscribe to the event
+        // -= is used to unsubscribe from the event
+
+        shoppingCartService.OnShoppingCartChanged -= ShoppingCartChanged;
+    }
+}

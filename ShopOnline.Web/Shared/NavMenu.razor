@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@implements IDisposable
+@using ShopOnline.Web.Services.Contracts
+@inject IShoppingCartService ShoppingCartService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ShopOnline.Web</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -24,10 +28,17 @@
                 <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
             </NavLink>
         </div>
+
+        <div class="nav-item px-3 d-sm-none">
+            <NavLink class="nav-link" href="ShoppingCart">
+                <span class="fas fa-shopping-cart" aria-hidden="true"></span> Shopping Cart (<b>@shoppingCartItemsCount</b>)
+            </NavLink>
+        </div>
     </nav>
 </div>
 
 @code {
+    private int shoppingCartItemsCount = 0;
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -35,5 +46,23 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+    protected override void OnInitialized()
+    {
+        ShoppingCartService.OnShoppingCartChanged += ShoppingCartChanged;
+
+    }
+    protected void ShoppingCartChanged(int totalQty)
+    {
+        shoppingCartItemsCount = totalQty;
+        StateHasChanged(); //blazors built in method
+                           //an explicit way to tell blazor to rerender that razor compo
+    }
+    void IDisposable.Dispose()
+    {
+        // += is used to subscribe to the event
+        // -= is used to unsubscribe from the event
+
+        ShoppingCartService.OnShoppingCartChanged -= ShoppingCartChanged;
     }
 }
