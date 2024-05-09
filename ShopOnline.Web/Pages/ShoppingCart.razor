@@ -27,7 +27,15 @@ else{
                         <div class="mb-4">
                             @item.ProductDescription
                         </div>
-                        <span>Price : <b>@item.Price.ToString("C")</b></span>
+                        <span>
+                            Price : <b>@item.Price.ToString("C")</b>
+                            @*when input field value changes*@
+                            <input type="number" @bind="@item.Qty"></input>
+                            <button data-itemId = "@item.Id" class="btn btn-info btn-sm update-qty" 
+                                @onclick="(()=> UpdateQtyCartItem_Click(item.Id, item.Qty))">Update Qty
+                            </button>
+
+                        </span>
                         <div>
                             <button class = "btn btn-danger sm" @onclick= "(() =>
                                 
@@ -44,7 +52,7 @@ else{
         <div class="col-md-3">
             <h5>Cart summary</h5>
             <div class="mt-2">
-                <div> Total- </div>
+                <div> Total- (@TotalQuantity items) &nbsp;<b>@TotalPrice</b></div>
                 <a href="#" class="btn btn-success">
                     <span class="oi oi-credit-card"></span>&nbsp; Proceed to Checkout
                 </a>
