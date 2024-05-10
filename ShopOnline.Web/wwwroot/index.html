@@ -19,8 +19,134 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=AZrJQRw9phi7j10dlt82kHXOGTd2OIaBPyIZjoTKG7AU3uQpxhMdPG_aVI-ljlWWMoo32VsQ0S2a4WFX&currency=USD" data-sdk-integration-source="button-factory"></script>
+    <script>
+        function initPayPalButton() {
+            var description = document.querySelector('#smart-button-container #description');
+            var amount = document.querySelector('#smart-button-container #amount');
+
+            var purchase_units = [];
+            purchase_units[0] = {};
+            purchase_units[0].amount = {};
+
+            paypal.Buttons({
+                style: {
+                    color: 'gold',
+                    shape: 'rect',
+                    label: 'paypal',
+                    layout: 'vertical',
+
+                },
+                //called by paypal when order is created
+                createOrder: function (data, actions) {
+
+                    purchase_units[0].description = description.value;
+                    purchase_units[0].amount.value = amount.value;
+
+                    return actions.order.create({
+                        purchase_units: purchase_units,
+                    });
+                },
+                //called after the relevant order has been approved by paypal
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (orderData) {
+                        //data sent from paypal after order is approved and sent to browser, data regarding order is sent from paypal
+                        // Full available details
+                        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+                        // Show a success message within this page, e.g.
+                        const element = document.getElementById('paypal-button-container');
+                        element.innerHTML = '';
+                        element.innerHTML = '<h3>Thank you for your payment!</h3>';
+
+                        // Or go to another URL:  actions.redirect('thank_you.html');
+
+                    });
+                },
+
+                onError: function (err) {
+                    console.log(err);
+                }
+            }).render('#paypal-button-container');
+        }
+    </script>
+
     <script src="js/ShoppingCartFunctions.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>
+
+<!--//data sent after successfully order approved by paypal-->
+
+<!--Capture result Object {
+  "id": "5EK14985E1968051V",
+  "intent": "CAPTURE",
+  "status": "COMPLETED",
+  "purchase_units": [
+    {
+      "reference_id": "default",
+      "amount": {
+        "currency_code": "USD",
+        "value": "300.00"
+      },
+      "payee": {
+        "email_address": "sb-uc8tt29579194@business.example.com",
+        "merchant_id": "NPCV8CE5HHR5G"
+      },
+      "description": "O_1_91499a18-78be-487a-a5e8-1b83ca6f7950",
+      "soft_descriptor": "PAYPAL *TEST STORE",
+      "shipping": {
+        "name": {
+          "full_name": "Bob Janes"
+        },
+        "address": {
+          "address_line_1": "Street 9",
+          "admin_area_2": "Wimbledon",
+          "admin_area_1": "LONDON",
+          "postal_code": "SW196AY",
+          "country_code": "GB"
+        }
+      },
+      "payments": {
+        "captures": [
+          {
+            "id": "7LW97810D4957540B",
+            "status": "COMPLETED",
+            "amount": {
+              "currency_code": "USD",
+              "value": "300.00"
+            },
+            "final_capture": true,
+            "seller_protection": {
+              "status": "NOT_ELIGIBLE"
+            },
+            "create_time": "2024-05-10T06:52:32Z",
+            "update_time": "2024-05-10T06:52:32Z"
+          }
+        ]
+      }
+    }
+  ],
+  "payer": {
+    "name": {
+      "given_name": "Bob",
+      "surname": "Janes"
+    },
+    "email_address": "bobjanes123@hotmail.com",
+    "payer_id": "BFGDA8YHL5CXY",
+    "address": {
+      "country_code": "GB"
+    }
+  },
+  "create_time": "2024-05-10T06:42:47Z",
+  "update_time": "2024-05-10T06:52:32Z",
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/5EK14985E1968051V",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}-->

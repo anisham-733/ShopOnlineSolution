@@ -1,0 +1,61 @@
+﻿@page "/Checkout"
+
+<h3 class="mb-5"Checkout</h3>
+<div class="row">
+    <div class="col-md-6">
+        <h4 class="mb-2">Payment method</h4>
+
+        @*purchase the items within users shopping cart*@
+        @*//integrate paypal payment gateway service provider*@
+        @*//data returned from paypal after an order has been approved to the browser, one field contains the unique decsription value*@
+        <div id="smart-button-container">
+            <input type="hidden" name="descriptionInput" id="description" @bind="@PaymentDescription" />
+            <input name="amountInput" type="hidden" id="amount" @bind="@PaymentAmount" />
+            <div style="text-align:center;margin-top:0.625rem;" id="paypal-button-container"></div>
+        </div>
+    </div>
+
+
+
+@if(ShoppingCartItems == null)
+{
+        <DisplaySpinner/>
+    }
+    else
+    {
+        <div class="col-md-6">
+            <h4 class="mb-2">
+                Payment summary
+            </h4>
+            @if (ShoppingCartItems.Count() > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach(var item in ShoppingCartItems)
+                        {
+                            <tr>
+                                <td>@item.Qty x @item.ProductName</td>
+                                <td>@item.TotalPrice.ToString("C")</td>
+                            </tr>
+                        }
+                            <tr>
+                                <td><b>Total</b></td>
+                                <td><b>@PaymentAmount.ToString("C")</b></td>
+                            </tr>
+                        
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>You currently have no items in your shopping cart</p>
+            }
+        </div>
+}
+</div>
