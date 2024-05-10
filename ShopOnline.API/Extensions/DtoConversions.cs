@@ -26,6 +26,20 @@ namespace ShopOnline.API.Extensions
                     }).ToList();
         }
 
+        //why to create dto-to separate classes for dto and entity
+        //dto class can evolve independently from entity classes
+        public static IEnumerable<ProductCategoryDto> ConvertToDto(this IEnumerable<ProductCategory> productCategories)
+        {
+            return (from product in productCategories
+                    select new ProductCategoryDto
+                    {
+                        Id = product.Id,
+                        Name = product.Name,
+                        IconCSS = product.IconCSS,
+                    }).ToList();
+
+        }
+
         //here 1 obj of type Product and 1 obj of tyoe ProdCat into 1 obj of tyoe ProductDto
 
         public static ProductDto ConvertToDto(this Product product, ProductCategory productCategory)
