@@ -18,6 +18,11 @@ namespace ShopOnline.API.Repositories
             return await _context.ProductCategories.ToListAsync();
         }
 
+        public Task<IEnumerable<Product>> GetCategoriesById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ProductCategory> GetCategory(int id)
         {
             var category = await _context.ProductCategories.SingleOrDefaultAsync(c => c.Id == id);
@@ -32,6 +37,14 @@ namespace ShopOnline.API.Repositories
         public async Task<IEnumerable<Product>> GetItems()
         {
             return await _context.Products.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetItemsByCategory(int id)
+        {
+            var products = await (from product in _context.Products
+                                  where product.CategoryId == id
+                                  select product).ToListAsync();
+            return products;
         }
     }
 }

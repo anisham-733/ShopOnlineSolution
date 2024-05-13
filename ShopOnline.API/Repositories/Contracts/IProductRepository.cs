@@ -8,5 +8,8 @@ namespace ShopOnline.API.Repositories.Contracts
         Task<IEnumerable<ProductCategory>> GetCategories();
         Task<Product> GetItem(int id);
         Task<ProductCategory> GetCategory(int id);
+
+        //retrieve a collection of products data, by passing category id
+        Task<IEnumerable<Product>> GetItemsByCategory(int id);
     }
 }

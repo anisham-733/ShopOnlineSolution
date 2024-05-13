@@ -102,5 +102,34 @@ namespace ShopOnline.Web.Services
                 throw;
             }
         }
+
+        //display the products on UI filtered by category id
+        public async Task<IEnumerable<ProductDto>> GetItemsByCategory(int categoryId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/Product/{categoryId}/GetItemsByCategory");
+                if (response.IsSuccessStatusCode)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return Enumerable.Empty<ProductDto>();
+                    }
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>();
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Http status code - {response.StatusCode} Message - {message}");
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }
