@@ -8,11 +8,11 @@ namespace ShopOnline.API.Extensions
     {
         //arg-convert product to productdto, 2nd arg is one that u want to join and return type is prod dto
         //converts a collection of products and coll of categories into a collect of objects of type productdto
-        public static IEnumerable<ProductDto> ConvertToDto(this IEnumerable<Product> products, IEnumerable<ProductCategory> productCategories )
+
+        //optimized code at last
+        public static IEnumerable<ProductDto> ConvertToDto(this IEnumerable<Product> products)
         {
             return (from product in products
-                    join category in productCategories
-                    on product.CategoryId equals category.Id
                     select new ProductDto
                     {
                         Id = product.Id,
@@ -21,8 +21,8 @@ namespace ShopOnline.API.Extensions
                         ImageURL = product.ImageURL,
                         Price = product.Price,
                         Qty = product.Qty,
-                        CategoryId = product.CategoryId,
-                        CategoryName = category.Name
+                        CategoryId = product.ProductCategory.Id,
+                        CategoryName = product.ProductCategory.Name
                     }).ToList();
         }
 
@@ -42,18 +42,18 @@ namespace ShopOnline.API.Extensions
 
         //here 1 obj of type Product and 1 obj of tyoe ProdCat into 1 obj of tyoe ProductDto
 
-        public static ProductDto ConvertToDto(this Product product, ProductCategory productCategory)
+        public static ProductDto ConvertToDto(this Product product)
         {
             return new ProductDto
             {
                 Id = product.Id,
-                Name = productCategory.Name,
+                Name = product.Name,
                 Description = product.Description,
                 ImageURL = product.ImageURL,
                 Price = product.Price,
                 Qty = product.Qty,
-                CategoryId = product.CategoryId,
-                CategoryName = productCategory.Name
+                CategoryId = product.ProductCategory.Id,
+                CategoryName = product.ProductCategory.Name
 
             };
         }

@@ -22,15 +22,19 @@ namespace ShopOnline.API.Controllers
             //write try and press tab key twice
             try
             {
+                ////// ** OPTIMIZATIONS ** //////////////
                 //could be optimized using Include in Linq query
-                var products = await _productRepository.GetItems();
-                var productCategories = await _productRepository.GetCategories();
+                // 2 separate calls to database/server layer
+                //optimize it by making 1 query to the database
 
-                if (products == null || productCategories == null) { return NotFound(); }
+                //Use local storage(i.e data stored on client within users browser) in blazor component for both product data and shopping cart data
+                var products = await _productRepository.GetItems();
+
+                if (products == null) { return NotFound(); }
                 else
                 {
                     //prods-1st arg and cat-2nd arg
-                    var productDtos = products.ConvertToDto(productCategories);
+                    var productDtos = products.ConvertToDto();
                     return Ok(productDtos);
                 }
 
@@ -50,13 +54,13 @@ namespace ShopOnline.API.Controllers
             try
             {
                 //could be optimized using Include in Linq query
+                //GetItem() - linq query jo product repo pe likhi is responsible for including and giving us prod cat id and name too
                 var product = await _productRepository.GetItem(id);
 
                 if (product == null) { return BadRequest(); }
                 else
                 {
-                    var productCategory = await _productRepository.GetCategory(product.CategoryId);
-                    var productDto = product.ConvertToDto(productCategory);
+                    var productDto = product.ConvertToDto();
                     return Ok(productDto);
                 }
 
@@ -93,8 +97,7 @@ namespace ShopOnline.API.Controllers
             try
             {
                 var products = await _productRepository.GetItemsByCategory(categoryId);
-                var productCategories = await _productRepository.GetCategories();
-                var productDtos = products.ConvertToDto(productCategories);
+                var productDtos = products.ConvertToDto();
                 return Ok(productDtos);
             }
             catch (Exception)

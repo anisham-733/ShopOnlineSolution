@@ -16,12 +16,7 @@ namespace ShopOnline.API.Repositories
         public async Task<IEnumerable<ProductCategory>> GetCategories()
         {
             return await _context.ProductCategories.ToListAsync();
-        }
-
-        public Task<IEnumerable<Product>> GetCategoriesById(int id)
-        {
-            throw new NotImplementedException();
-        }
+        }        
 
         public async Task<ProductCategory> GetCategory(int id)
         {
@@ -31,19 +26,25 @@ namespace ShopOnline.API.Repositories
 
         public async Task<Product> GetItem(int id)
         {
-            return await _context.Products.FindAsync(id);
+            //to establish joins btw 2 entities through this lambda expression - Include
+            var product = await _context.Products
+                         .Include(c => c.ProductCategory)
+                         //filter the product data based on relevant product id passed to single or default async ()
+                         .SingleOrDefaultAsync(p => p.Id == id);
+            return product;
         }
 
         public async Task<IEnumerable<Product>> GetItems()
         {
-            return await _context.Products.ToListAsync();
+            return await _context.Products
+                        .Include(c => c.ProductCategory).ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetItemsByCategory(int id)
         {
-            var products = await (from product in _context.Products
-                                  where product.CategoryId == id
-                                  select product).ToListAsync();
+            var products = await _context.Products
+                                    .Include(c => c.ProductCategory)
+                                    .Where(p=>p.CategoryId == id).ToListAsync();
             return products;
         }
     }
