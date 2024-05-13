@@ -1,7 +1,7 @@
 Blazor WebAssembly and Web API on .NET 6 by building a shopping cart application using C#. 
 Integrated a payment gateway into Blazor WebAssembly component, so that a user is able to pay for products through your application using a debit or credit card or PayPal account.
 
-Basic approaches and Architecture
+Basic approaches and Architecture :-
 1. Create the Database using EF Core Code First Database Migrations
 2. Retrieve Product Data from Database (Web API component)
 3. Create Classes for Data Transfer Objects (DTOs)
