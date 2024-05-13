@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using ShopOnline.Models.Dtos;
+using ShopOnline.Web.Services;
 using ShopOnline.Web.Services.Contracts;
 
 namespace ShopOnline.Web.Pages
@@ -17,6 +18,12 @@ namespace ShopOnline.Web.Pages
         [Inject]
         public IEnumerable<ProductDto> ProductsList { get; set; }
 
+        [Inject]
+        public IManageProductsLocalStorageService ManageProductsLocalStorageService { get; set; }
+
+        [Inject]
+        public IManageCartItemsLocalStorageService ManageCartItemsLocalStorageService { get; set; }
+        
         public string ErrorMessage { get; set; }
 
         //override a methid named OnInitializedAsync()
@@ -26,11 +33,17 @@ namespace ShopOnline.Web.Pages
         {
             try
             {
+                //here we want to clear relevant local storage items from local storage
+                //and force the server to set it
+                await ClearLocalStorage();
+
                 //retrieve products data from webapi
-                ProductsList = await ProductService.GetItems();
+                //retrieve relevant data from server and save the data to local storage
+                //trips to server saved and performance of app is potentially enhanced
+                ProductsList = await ManageProductsLocalStorageService.GetCollection();
 
                 //fetch items stored in users shopping cart
-                var shoppingCartItems = await ShoppingCartService.GetItems(HardCoded.UserId);
+                var shoppingCartItems = await ManageCartItemsLocalStorageService.GetCollection();
                 //cal number of items stored in cart
                 var totalQty = shoppingCartItems.Sum(i=>i.Qty);
 
@@ -45,6 +58,12 @@ namespace ShopOnline.Web.Pages
 
                 ErrorMessage = ex.Message;
             }
+        }
+
+        private async Task ClearLocalStorage()
+        {
+            await ManageProductsLocalStorageService.RemoveCollection();
+            await ManageCartItemsLocalStorageService.RemoveCollection();
         }
 
         protected IOrderedEnumerable<IGrouping<int, ProductDto>> GetGroupedProductsByCategory()

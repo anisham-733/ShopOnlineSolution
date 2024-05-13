@@ -28,6 +28,9 @@ namespace ShopOnline.API.Controllers
                 //optimize it by making 1 query to the database
 
                 //Use local storage(i.e data stored on client within users browser) in blazor component for both product data and shopping cart data
+
+                //when working with large amounts of data, performance would be highly beneficial and performance improvement would be significant
+
                 var products = await _productRepository.GetItems();
 
                 if (products == null) { return NotFound(); }

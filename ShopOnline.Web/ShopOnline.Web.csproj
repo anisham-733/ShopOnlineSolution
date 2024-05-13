@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+	  
+	 <!--local storage javascript stores data in keyvalue pairs-->
+	  <!--local storage stores data with no expiration date-->
+	  <!--//data is not deleted when browser is closed and is available for future sessions-->
+	  <!--//this pkg abstracts the js code for managing local storage, so we dont need to write js code ourselves-->
+	  <!--//we are now going to create 2 services to  encapsulate our local storage functionality--> 
+    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.27" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.27" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
